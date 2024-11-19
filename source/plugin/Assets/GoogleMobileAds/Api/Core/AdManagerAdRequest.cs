@@ -35,6 +35,7 @@ namespace GoogleMobileAds.Api.AdManager
         /// <summary>
         /// The custom targeting parameters.
         /// </summary>
+        [Obsolete("Use CustomTargetingLists instead.")]
         public Dictionary<string, string> CustomTargeting = new Dictionary<string, string>();
 
         /// <summary>
@@ -53,7 +54,9 @@ namespace GoogleMobileAds.Api.AdManager
         public AdManagerAdRequest(AdManagerAdRequest request) : base(request)
         {
             PublisherProvidedId = request.PublisherProvidedId;
+#pragma warning disable 618
             CustomTargeting = request.CustomTargeting;
+#pragma warning restore 618
             CategoryExclusions = request.CategoryExclusions;
         }
     }

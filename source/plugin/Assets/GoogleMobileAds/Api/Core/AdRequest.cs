@@ -39,6 +39,12 @@ namespace GoogleMobileAds.Api
         /// </summary>
         public const string TestDeviceSimulator = "SIMULATOR";
 
+        /// <summary>
+        /// The custom targeting parameters.
+        /// </summary>
+        public Dictionary<string, List<string>> CustomTargetingLists =
+                new Dictionary<string, List<string>>();
+
         static AdRequest()
         {
             Version version = typeof(AdRequest).Assembly.GetName().Version;

@@ -266,6 +266,24 @@ namespace GoogleMobileAds.Android
                 adRequestBuilder.Call<AndroidJavaObject>("addKeyword", keyword);
             }
 
+            foreach (KeyValuePair<string, List<string>> entry in request.CustomTargetingLists)
+            {
+                if (entry.Value == null)
+                {
+                    continue;
+                }
+                else if (entry.Value.Count > 1)
+                {
+                    adRequestBuilder.Call<AndroidJavaObject>("addCustomTargeting", entry.Key,
+                                                             GetJavaListObject(entry.Value));
+                }
+                else if (entry.Value.Count > 0)
+                {
+                    adRequestBuilder.Call<AndroidJavaObject>("addCustomTargeting", entry.Key,
+                                                             entry.Value[0]);
+                }
+            }
+
             // Denote that the request is coming from this Unity plugin.
             adRequestBuilder.Call<AndroidJavaObject>(
                     "setRequestAgent",
@@ -395,11 +413,32 @@ namespace GoogleMobileAds.Android
             {
                 adManagerAdRequestBuilder.Call<AndroidJavaObject>("addCategoryExclusion", category);
             }
+
+            foreach (KeyValuePair<string, List<string>> entry in
+                    adManagerAdRequest.CustomTargetingLists)
+            {
+                if (entry.Value == null)
+                {
+                    continue;
+                }
+                else if (entry.Value.Count > 1)
+                {
+                    adManagerAdRequestBuilder.Call<AndroidJavaObject>("addCustomTargeting",
+                            entry.Key, GetJavaListObject(entry.Value));
+                }
+                else if (entry.Value.Count > 0)
+                {
+                    adRequestBuilder.Call<AndroidJavaObject>("addCustomTargeting", entry.Key,
+                                                             entry.Value[0]);
+                }
+            }
+#pragma warning disable 618
             foreach (KeyValuePair<string, string> entry in adManagerAdRequest.CustomTargeting)
             {
                 adManagerAdRequestBuilder.Call<AndroidJavaObject>("addCustomTargeting",
                                                                    entry.Key, entry.Value);
             }
+#pragma warning restore 618
             return adManagerAdRequestBuilder.Call<AndroidJavaObject>("build");
         }
 
