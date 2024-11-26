@@ -27,6 +27,10 @@
   [_mediationExtras addObject:mediationExtras];
 }
 
+- (void)setCustomTargetingWithKey:(nonnull NSString *)key value:(NSString *)value {
+  [self.customTargeting setValue:value forKey:key];
+}
+
 - (GADRequest *)request {
   GADRequest *request = [GADRequest request];
   request.keywords = self.keywords;

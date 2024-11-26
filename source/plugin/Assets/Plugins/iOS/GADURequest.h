@@ -22,11 +22,17 @@
 /// Extra parameters to be sent up in the ad request.
 @property(nonatomic, strong) NSMutableDictionary *extras;
 
+/// Key-value pairs used for custom targeting.
+@property(nonatomic, copy, nullable) NSMutableDictionary *customTargeting;
+
 /// Convenience method for adding a single keyword.
 - (void)addKeyword:(NSString *)keyword;
 
 /// Convenience method for setting an extra parameters.
 - (void)setExtraWithKey:(NSString *)key value:(NSString *)value;
+
+/// Convenience method for setting custom targeting parameters.
+- (void)setCustomTargetingWithKey:(nonnull NSString *)key value:(nullable NSString *)value;
 
 /// Constructs a GADRequest with the defined targeting values.
 - (GADRequest *)request;
