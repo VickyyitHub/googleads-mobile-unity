@@ -1,0 +1,73 @@
+using UnityEngine;
+using GoogleMobileAds.Api; // Import du SDK AdMob
+using UnityEngine.UI;
+
+public class AdMobManager : MonoBehaviour
+{
+    private InterstitialAd interstitialAd;
+    public Button boutonPub; // Bouton pour afficher la publicité
+
+    private string appId = "votre-id-application-admob";
+    private string adUnitId = "votre-id-unite-publicitaire";
+
+    private void Start()
+    {
+        // Initialiser AdMob
+        MobileAds.Initialize(initStatus => { Debug.Log("AdMob initialisé !"); });
+
+        // Précharger la publicité interstitielle
+        LoadInterstitialAd();
+
+        // Ajouter l'écouteur au bouton
+        boutonPub.onClick.AddListener(AfficherPublicite);
+    }
+
+    private void LoadInterstitialAd()
+    {
+        interstitialAd = new InterstitialAd(adUnitId);
+
+        // Abonnez-vous aux événements pour suivre l'état de la publicité
+        interstitialAd.OnAdLoaded += HandleAdLoaded;
+        interstitialAd.OnAdFailedToLoad += HandleAdFailedToLoad;
+        interstitialAd.OnAdClosed += HandleAdClosed;
+
+        // Charger une publicité
+        AdRequest request = new AdRequest.Builder().Build();
+        interstitialAd.LoadAd(request);
+    }
+
+    private void AfficherPublicite()
+    {
+        if (interstitialAd.IsLoaded())
+        {
+            interstitialAd.Show(); // Montre la publicité
+        }
+        else
+        {
+            Debug.Log("La publicité n'est pas prête !");
+        }
+    }
+
+    // Événements publicitaires (facultatif)
+    public void HandleAdLoaded(object sender, System.EventArgs args)
+    {
+        Debug.Log("Publicité chargée !");
+    }
+
+    public void HandleAdFailedToLoad(object sender, AdFailedToLoadEventArgs args)
+    {
+        Debug.LogError("Échec du chargement de la publicité : " + args.Message);
+    }
+
+    public void HandleAdClosed(object sender, System.EventArgs args)
+    {
+        Debug.Log("Publicité fermée. Rechargement d'une nouvelle publicité.");
+        LoadInterstitialAd(); // Recharge une nouvelle publicité
+    }
+
+    private void OnDestroy()
+    {
+        // Nettoyer pour éviter les fuites de mémoire
+        interstitialAd.Destroy();
+    }
+}
